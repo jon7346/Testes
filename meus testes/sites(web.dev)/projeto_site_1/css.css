@@ -1,0 +1,22 @@
+/*
+# = id 
+. = class
+*/
+.cabeçalho{
+    background-color: yellow;
+    font-family: 'Courier New', Courier, monospace;
+    padding-top: 0px;
+    width: 100%;
+}
+#links{
+    background-color:rgb(139, 139, 0) ;
+    font-family: 'Courier New', Courier, monospace;
+}
+.titulos {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: x-large;
+}
+.paragrafos {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: small;
+}
