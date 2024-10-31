@@ -1,1 +1,48 @@
 construa uma tabuada 
+1. Gerador de Nomes Aleatórios
+Crie um programa que gere nomes de personagens fictícios combinando diferentes prefixos e sufixos, permitindo ao usuário escolher a quantidade de nomes a serem gerados.
+
+2. Simulador de Sorteio de Prêmios
+Desenvolva um simulador onde o usuário pode cadastrar participantes e, em seguida, realizar um sorteio para premiar um ou mais vencedores aleatórios.
+
+3. Jogo de Trivia
+Crie um jogo de perguntas e respostas (trivia) onde o usuário pode escolher categorias e responder a perguntas. O programa deve calcular a pontuação e dar feedback sobre as respostas.
+
+4. Conversor de Emojis
+Implemente um conversor que substitua palavras específicas em uma frase por emojis correspondentes, por exemplo, "cachorro" por 🐶 e "amor" por ❤️.
+
+5. Criador de Histórias Interativas
+Desenvolva um programa que permite ao usuário criar uma história interativa, onde ele pode escolher diferentes caminhos e finais. O usuário deve escolher opções que mudam o curso da narrativa.
+
+6. Detector de Sentimentos
+Escreva um programa que analise o texto fornecido pelo usuário e determine o sentimento predominante (positivo, negativo ou neutro) usando palavras-chave.
+
+7. Planejador de Viagens
+Crie um aplicativo que ajude o usuário a planejar uma viagem, permitindo adicionar destinos, calcular custos e sugerir atividades com base nas preferências do usuário.
+
+8. Criador de Puzzles de Palavras
+Desenvolva um gerador de palavras cruzadas ou caça-palavras, permitindo ao usuário escolher um tema e o nível de dificuldade.
+
+9. Desafio de Memória
+Implemente um jogo de memória onde o usuário deve memorizar uma sequência de cores ou números e depois repeti-la. A sequência aumenta de tamanho a cada rodada.
+
+10. Rascunho de Arte com ASCII
+Crie um programa que permita ao usuário desenhar usando caracteres ASCII. O usuário pode escolher diferentes "ferramentas" e "cores" (representadas por diferentes caracteres).
+
+1. Calculadora Simples
+Crie uma calculadora que receba dois números e uma operação (adição, subtração, multiplicação, divisão) e retorne o resultado.
+
+2. Validação de Senhas
+Escreva um programa que verifique se uma senha atende aos critérios de segurança: pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas, números e símbolos.
+
+3. Jogo da Adivinhação
+Desenvolva um jogo onde o computador escolhe um número aleatório entre 1 e 100, e o jogador deve adivinhar. O programa deve informar se o palpite é muito alto, muito baixo ou correto.
+
+4. Contador de Vogais
+Crie um programa que conte o número de vogais em uma frase fornecida pelo usuário.
+
+5. Conversor de Temperatura
+Implemente um conversor que transforme temperaturas de Celsius para Fahrenheit e vice-versa.
+
+6. FizzBuzz
+Escreva um programa que imprima os números de 1 a 100, mas para múltiplos de 3, imprima "Fizz" em vez do número, e para múltiplos de 5, imprima "Buzz". Para números que são múltiplos de ambos, imprima "FizzBuzz".
