@@ -1,1 +1,32 @@
 https://guiadeti.com.br/30-sites-de-desafios-para-treinar-programacao/
+
+1 – 100 days CSS
+2 – CSSBatle
+3 – Code Wars
+4 – CodeCademy
+5 – CodeChef
+6 – Codelity
+7 – Coderbyte
+8 – Codewell
+9 – Codier
+10 – CodinGame
+11 – CyberDojo
+12 – Edabit
+13 – Exercism
+14 – FlexBox Froggy
+15 – FreeCodeCamp
+16 – Frontend Mentor
+17 – Hacker Rank
+18 – HackerEarth
+19 – Human Resource Machine
+20 – Javascript30
+21 – LeetCode
+22 – Programiz
+23 – Programmr
+24 – Project Euler
+25 – Sololearn
+26 – Sphere Online Judge
+27 – TopCoder
+28 – URI Online / Beecrowd
+29 – Vim Adventures
+30 – W3schools Tutoriais1 – 100 days CSS
