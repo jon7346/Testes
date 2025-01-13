@@ -29,6 +29,8 @@ Implemente um jogo de memória onde o usuário deve memorizar uma sequência de 
 10. Rascunho de Arte com ASCII
 Crie um programa que permita ao usuário desenhar usando caracteres ASCII. O usuário pode escolher diferentes "ferramentas" e "cores" (representadas por diferentes caracteres).
 
+
+
 1. Calculadora Simples
 Crie uma calculadora que receba dois números e uma operação (adição, subtração, multiplicação, divisão) e retorne o resultado.
 
