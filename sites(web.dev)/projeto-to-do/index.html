@@ -4,34 +4,23 @@ Conceitos Usados: Manipulação do DOM, arrays, eventos como click, local storag
 <!DOCTYPE html>
 <html>
     <head>
-        <script>
-            function pegar( ){
-            let nome,lista= document.getElementById('nome,lista').value
-            let descrição= document.getElementById('descrição').value
-            }
-            function criar(){
-                pegar()
-
-            }
-
-        </script>
-    
-    </head>
+        <link href="./javascrip.js" type="javascrip/text" >
+        <link rel="stylesheet" href="./css.css" type="css">
+            <meta charset="utf-8">
+            
+    </head> 
     <body>
-        <div>
-        <h1>TO DO</h1>
-        <p><h6>uma pagina para criar sua lista de tarefas </h6></p>
-        <label>nome da sua lista</label>
-        <p><input type="text" id="nome,lista"></p>
-        <label>descrição</label>
-        <p><input type="text" id="descrição"></p>
-        <p><input type="button" id="submit" value='criar'onclick=criar()></p>
-        </div>
-        <div>
-            <h1>
-                listas ja criadas :
-            </h1>
-           
-        <div>
+        <template id="caixa">
+       <H1>
+        Autenticação 
+       </H1>
+       <label>Nome</label>
+       <input id="nome">
+       <input id="nome" type="password">
+       <button value='entrar' onclick="enviar()">
+
+        <button value="cadastrar" onclick="cadastrar()">
+       </template>
+
     </body>
 </html>
