@@ -1,5 +1,13 @@
-.caixa {
-    border: 1px;
-    position: fixed;
-    padding: 35%;
+body {
+   
+    background-color: #02185ba0;
+}
+
+.text{
+    margin: auto;
+    margin-left: 33%;
+    margin-right: 33%;
+}
+#texto {
+  padding: 75px;
 }
