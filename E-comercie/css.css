@@ -1,0 +1,17 @@
+* {
+ padding: 0px ;
+ margin: 0px;
+ text-align: center;
+}
+
+a.link {
+    margin: 5px;
+    text-decoration: none;
+    background-color: rgba(3, 254, 61, 0.68);
+    padding: 5px;
+    border-radius: 10px;
+    
+}
+#cabeçalho {
+    background-color: aquamarine;
+}
