@@ -7,11 +7,17 @@
 a.link {
     margin: 5px;
     text-decoration: none;
-    background-color: rgba(3, 254, 61, 0.68);
+    background-color: rgba(233, 254, 3, 0.68);
     padding: 5px;
     border-radius: 10px;
-    
 }
 #cabeçalho {
     background-color: aquamarine;
+    padding: 10px;
+}
+#conta {
+    float: right ;
+    padding: 15px;
+    border-radius: 300px;
+    
 }
