@@ -35,7 +35,7 @@ app.get('/', (req,res) => {
 });
 app.post('upload', upload.single('file'), (req,res) => {
     const file = fs.readdirSync(UPLOAD_DIR);
-    const fileLinks = files.map(file => '<li><a href="/files/${file}">${file}"')
+    const fileLinks = file.map(file => '<li><a href="/files/${file}">${file}"')
     res.send(''
 
     )
