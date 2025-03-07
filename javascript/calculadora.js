@@ -1,6 +1,6 @@
 const http = require('http')
 const { url } = require('inspector')
-
+const fs = require('fs')
 const path = require('path')
 
 const HOST= "127.0.0.1"
@@ -10,7 +10,9 @@ const PORT = 5001
                        
 
 
-const server = http.createServer((req,res)=>
+const server = http.createServer((req,res)=>{
+    var filepath = path.join(__dirname, 'index.html')
+    
     
     res.end(`
        <html>
@@ -69,7 +71,7 @@ const server = http.createServer((req,res)=>
         
 
 
-)
+ })
 server.listen(PORT, HOST,  () =>{
     console.log(`server is listening in http://${HOST}:${PORT}/`)
     
