@@ -1,0 +1,4 @@
+ projeto criação de sistema de : 
+ Desvio padrão 
+ variância 
+ desvio 

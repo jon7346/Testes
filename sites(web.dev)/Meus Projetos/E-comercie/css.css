@@ -1,23 +1,34 @@
-* {
- padding: 0px ;
- margin: 0px;
- text-align: center;
+body{
+    margin: 0px;
+    text-align: center;
 }
 
 a.link {
+    font-size: larger;
     margin: 5px;
     text-decoration: none;
     background-color: rgba(233, 254, 3, 0.68);
     padding: 5px;
     border-radius: 10px;
 }
-#cabeçalho {
+.cabeçalho{
+   
     background-color: aquamarine;
     padding: 10px;
 }
-#conta {
-    float: right ;
+#conta{
+    border: 1px solid black;
     padding: 15px;
-    border-radius: 300px;
+    border-radius: 85%;
+}
+.produtos-slider{
+    border: 1px solid black ;
+}
+.produto-slide{
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid black;
+}
+#sacola { 
     
 }
