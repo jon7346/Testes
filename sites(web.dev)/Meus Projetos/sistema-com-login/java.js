@@ -1,25 +1,30 @@
+function login() {
+    const name = document.getElementById("name").value ;
+    const password= document.getElementById("senha").value; 
 
-function cadastro() {
- let nome = document.getElementById('nome') ;
- let senha = document.getElementById('senha');
-       
- localStorage.setItem('nome',nome)
- localStorage.setItem('Senha',senha)
-}
-function login () {
-let name = document.getElementById('name')
-let password = document.getElementById('password')
-
-let nome = localStorage.getItem('nome',nome)
-let senha = localStorage.getItem('senha',senha)
-
-if(password == senha & name == nome ) {
- 
-  
-}
-else  {
-    alert('informações de login incorretas ')
-}
-
-}
-
+    if (  name == localStorage.getItem(nome) && password == localStorage.getItem(senha)){
+        alert("entrou")
+       Document.getElementById("name").value = ""
+        Document.getElementById("senha").value = ""
+    }
+    else {
+        alert("senha ou usuário incorreto")
+        
+        
+    }
+ }
+ function cadastrado() {
+    const nome = document.getElementById("name").value
+    const senha = document.getElementById("senha").value
+   
+     if ( localStorage.getItem(nome)) {
+       alert("usuário ja cadastrado");
+       return;
+     } 
+     else {
+      localStorage.setItem(nome,senha);
+      alert("Cadasto realizadoo !!!!")
+      Document.getElementById("name").value = ""
+      Document.getElementById("senha").value = ""
+     }
+     }

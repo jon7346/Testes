@@ -1,9 +1,9 @@
 body{
  background-color: rgb(28, 27, 27);
-
+ margin: 0px;
 }
 
-#cadastro{
+ .cadastro{
     border-radius:30px ; 
     background-color: #e3e3e3;
     text-align: center;
@@ -31,4 +31,12 @@ body{
 #barra {
     background-color: #e3e3e3;
 
+}
+#cabeçalho { 
+    background-color: rgb(247, 227, 202);
+    margin: 0px;
+    padding: 0px;
+}
+#conta { 
+    padding: 10px;
 }
