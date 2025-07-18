@@ -1,0 +1,41 @@
+<head>
+    <meta charset="UTF-8">
+    <title>Projeto CRUD</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="./main.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+<head>
+<body>
+  <h1>Social Media App</h1>
+  <div class="container">
+    <div class="left">
+      <form id="form">
+            <label for="post">Escreva seu post aqui</label>
+            <br><br>
+            <textarea name="post" id="input" cols="30" rows="10"></textarea>
+            <br><br>
+            <div id="msg"></div>
+            <button type="submit">Post</button>
+      </form>
+    </div>
+    <div class="right">
+      <h3>Veja seus poster aqui </h3>
+      <div id="posts">
+          <div>
+            <p>Hello world post 1</p>
+            <span class="options">
+              <i onClick="editPost(this)" class="fas fa-edit"></i>
+              <i onClick="deletePost(this)" class="fas fa-trash-alt"></i>
+            </span>
+        
+          </div>
+          <div>
+            <p>Hello world post 2</p>
+            <span class="options">
+              <i onClick="editPost(this)" class="fas fa-edit"></i>
+              <i onClick="deletePost(this)" class="fas fa-trash-alt"></i>
+            </span>
+      
+      </div>
+  </div>
+</body>
