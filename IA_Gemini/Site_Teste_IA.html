@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MercadoBR - Seu Marketplace Completo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-bg {
+            background-color: #f8f8f8;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.95), rgba(255,255,255,0.6)), url('https://placehold.co/1600x600/e53e3e/ffffff?text=Promo%C3%A7%C3%B5es+Imperd%C3%ADveis');
+            background-size: cover;
+            background-position: center;
+        }
+        .notification {
+            transition: opacity 0.5s, transform 0.5s;
+        }
+        /* Esconde o scrollbar do filtro de categorias */
+        #category-filter-list::-webkit-scrollbar {
+            display: none;
+        }
+        #category-filter-list {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Cabeçalho -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="#" onclick="showHomePage(event)" class="text-3xl font-bold text-red-600">MercadoBR</a>
+                
+                <!-- Barra de Busca -->
+                <div class="hidden md:flex flex-grow max-w-xl mx-4">
+                    <input type="text" id="search-input-desktop" placeholder="Buscar produtos, marcas e mais..." class="w-full px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-red-500">
+                    <button onclick="performSearch()" class="bg-red-600 text-white px-6 py-2 rounded-r-md hover:bg-red-700 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Ações do Usuário -->
+                <div id="user-actions" class="flex items-center space-x-4">
+                    <!-- Conteúdo dinâmico: Login ou Logout -->
+                </div>
+            </div>
+             <!-- Barra de busca para mobile -->
+            <div class="md:hidden mt-3">
+                <div class="flex w-full">
+                    <input type="text" id="search-input-mobile" placeholder="Buscar produtos..." class="w-full px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-red-500">
+                    <button onclick="performSearch()" class="bg-red-600 text-white px-4 py-2 rounded-r-md hover:bg-red-700 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <nav class="bg-white border-t border-gray-200">
+            <div class="container mx-auto px-4 py-2 flex justify-between items-center text-sm">
+                 <div class="flex space-x-6">
+                    <a href="#" onclick="navigateTo('categories', event)" class="text-gray-700 hover:text-red-600 font-medium">Categorias</a>
+                    <a href="#" onclick="navigateTo('deals', event)" class="text-gray-700 hover:text-red-600 font-medium">Ofertas do Dia</a>
+                    <a href="#" onclick="navigateTo('popular', event)" class="text-gray-700 hover:text-red-600 font-medium">Mais Vendidos</a>
+                </div>
+                <div>
+                     <a href="#" onclick="navigateTo('sellerAuth', event)" class="bg-red-100 text-red-700 px-3 py-1 rounded-full font-semibold hover:bg-red-200 transition">Venda no MercadoBR</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="container mx-auto px-4 py-8">
+        
+        <!-- VISÃO DA HOMEPAGE -->
+        <div id="home-view">
+            <!-- Seção Hero -->
+            <section class="hero-bg rounded-lg p-8 md:p-16 mb-12 flex items-center">
+                <div class="max-w-md">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">As melhores ofertas, em um só lugar.</h1>
+                    <p class="text-gray-700 mb-6">Explore milhares de produtos de vendedores de todo o Brasil com segurança e rapidez.</p>
+                    <a href="#" onclick="navigateTo('deals', event)" class="bg-red-600 text-white font-semibold px-8 py-3 rounded-md hover:bg-red-700 transition-transform transform hover:scale-105 inline-block">Ver Ofertas</a>
+                </div>
+            </section>
+            
+            <!-- Categorias -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Navegue por Categorias</h2>
+                <div id="category-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <!-- As categorias serão inseridas aqui via JavaScript -->
+                </div>
+            </section>
+
+            <!-- Ofertas do Dia -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Ofertas do Dia</h2>
+                <div id="deals-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    <!-- Os produtos em oferta serão inseridos aqui via JavaScript -->
+                </div>
+            </section>
+
+            <!-- Produtos Populares -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Produtos Populares</h2>
+                <div id="popular-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    <!-- Os produtos populares serão inseridos aqui via JavaScript -->
+                </div>
+            </section>
+        </div>
+
+        <!-- VISÃO DE PÁGINAS (CATEGORIAS, PRODUTOS, ETC.) -->
+        <div id="page-view" class="hidden">
+            <!-- O conteúdo da página será injetado aqui pelo JavaScript -->
+        </div>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-white border-t mt-12">
+        <div class="container mx-auto px-4 py-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-gray-600">
+                <div>
+                    <h3 class="text-xl font-bold text-red-600 mb-4">MercadoBR</h3>
+                    <p class="text-sm">Seu marketplace para comprar e vender com segurança e facilidade.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-800 mb-3">Institucional</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-red-600">Sobre nós</a></li>
+                        <li><a href="#" class="hover:text-red-600">Termos e Condições</a></li>
+                        <li><a href="#" class="hover:text-red-600">Política de Privacidade</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-800 mb-3">Ajuda</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-red-600">Central de Atendimento</a></li>
+                        <li><a href="#" class="hover:text-red-600">Como comprar</a></li>
+                        <li><a href="#" class="hover:text-red-600">Como vender</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-800 mb-3">Conecte-se</h4>
+                    <div class="flex space-x-4">
+                       <!-- Ícones de redes sociais -->
+                    </div>
+                </div>
+            </div>
+            <div class="text-center text-gray-500 text-sm mt-8 pt-8 border-t">
+                © 2025 MercadoBR - Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Notificação de "Adicionado ao Carrinho" -->
+    <div id="notification" class="notification fixed bottom-5 right-5 bg-gray-900 text-white py-3 px-5 rounded-lg shadow-lg opacity-0 transform translate-y-10 z-50">
+        <!-- Mensagem da notificação -->
+    </div>
+
+    <script>
+        // --- Dados de Exemplo (Simulando um Banco de Dados) ---
+        const allCategories = ['Eletrônicos', 'Moda', 'Casa', 'Esportes', 'Beleza', 'Ferramentas'];
+        const categories = [
+            { name: 'Eletrônicos', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>' },
+            { name: 'Moda', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>' },
+            { name: 'Casa', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>' },
+            { name: 'Esportes', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>' },
+            { name: 'Beleza', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6.586 4.414l-1.414-1.414M6 12a6 6 0 1112 0A6 6 0 016 12z" /></svg>' },
+            { name: 'Ferramentas', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>' }
+        ];
+
+        const products = [
+            { id: 1, name: 'Smartphone Pro X', image: 'https://placehold.co/300x300/e53e3e/ffffff?text=Smartphone', price: 2999.90, oldPrice: 3499.90, seller: 'Loja Tech', rating: 4.5, isDeal: true, category: 'Eletrônicos', description: 'O mais novo Smartphone Pro X com 256GB de armazenamento, câmera tripla de 108MP e tela Super Retina.' },
+            { id: 2, name: 'Notebook Ultra Fino', image: 'https://placehold.co/300x300/cccccc/000000?text=Notebook', price: 4599.00, oldPrice: null, seller: 'Importados BR', rating: 4.8, isDeal: false, category: 'Eletrônicos', description: 'Notebook de alta performance com processador i7, 16GB de RAM e SSD de 512GB. Perfeito para trabalho e lazer.' },
+            { id: 3, name: 'Tênis de Corrida', image: 'https://placehold.co/300x300/e53e3e/ffffff?text=T%C3%AAnis', price: 349.99, oldPrice: 499.99, seller: 'Esporte Total', rating: 4.2, isDeal: true, category: 'Esportes', description: 'Tênis com tecnologia de amortecimento avançada, ideal para corridas de longa distância.' },
+            { id: 4, name: 'Cadeira Gamer Confort', image: 'https://placehold.co/300x300/cccccc/000000?text=Cadeira+Gamer', price: 899.90, oldPrice: 1199.90, seller: 'Casa Nerd', rating: 4.9, isDeal: true, category: 'Casa', description: 'Cadeira ergonômica com suporte lombar e design moderno para longas sessões de jogos.' },
+            { id: 5, name: 'Fone de Ouvido Bluetooth', image: 'https://placehold.co/300x300/e53e3e/ffffff?text=Fone+de+Ouvido', price: 199.90, oldPrice: null, seller: 'Loja Tech', rating: 4.6, isDeal: false, category: 'Eletrônicos', description: 'Fone sem fio com cancelamento de ruído e bateria para 20 horas de música.' },
+            { id: 6, name: 'Jaqueta Corta-Vento', image: 'https://placehold.co/300x300/cccccc/000000?text=Jaqueta', price: 249.00, oldPrice: null, seller: 'Estilo Urbano', rating: 4.4, isDeal: false, category: 'Moda', description: 'Jaqueta leve e resistente à água, perfeita para o dia a dia.' },
+            { id: 7, name: 'Kit de Ferramentas 100 Peças', image: 'https://placehold.co/300x300/e53e3e/ffffff?text=Ferramentas', price: 179.90, oldPrice: 229.90, seller: 'Rei da Reforma', rating: 4.7, isDeal: true, category: 'Ferramentas', description: 'Maleta completa com 100 peças essenciais para reparos domésticos.' },
+            { id: 8, name: 'Smartwatch Fit 2', image: 'https://placehold.co/300x300/cccccc/000000?text=Smartwatch', price: 499.00, oldPrice: null, seller: 'Importados BR', rating: 4.3, isDeal: false, category: 'Eletrônicos', description: 'Relógio inteligente com monitoramento cardíaco, GPS e mais de 50 modos de treino.' },
+            { id: 9, name: 'Perfume Masculino Intense', image: 'https://placehold.co/300x300/e53e3e/ffffff?text=Perfume', price: 329.90, oldPrice: null, seller: 'Beleza Pura', rating: 4.9, isDeal: false, category: 'Beleza', description: 'Fragrância amadeirada marcante para homens de personalidade.' },
+            { id: 10, name: 'Robô Aspirador Inteligente', image: 'https://placehold.co/300x300/cccccc/000000?text=Rob%C3%B4+Aspirador', price: 1299.00, oldPrice: 1599.00, seller: 'Casa Conectada', rating: 4.8, isDeal: true, category: 'Casa', description: 'Aspirador que varre, aspira e passa pano sozinho, controlável por app.' },
+        ];
+
+
+        // --- Funções de Renderização de Componentes ---
+        
+        function formatCurrency(value) {
+            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function renderStars(rating) {
+            let stars = '';
+            let fullStars = Math.floor(rating);
+            for (let i = 0; i < fullStars; i++) { stars += '<svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>'; }
+            for (let i = 0; i < 5 - fullStars; i++) { stars += '<svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>'; }
+            return `<div class="flex items-center">${stars}<span class="text-xs text-gray-500 ml-1">(${rating})</span></div>`;
+        }
+        
+        function createProductCard(product) {
+            return `
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col">
+                    <div class="relative cursor-pointer" onclick="navigateTo('product', event, ${product.id})">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/300x300?text=Imagem+Indispon%C3%ADvel';">
+                        ${product.isDeal ? '<div class="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">OFERTA</div>' : ''}
+                    </div>
+                    <div class="p-4 flex flex-col flex-grow">
+                        <h3 class="text-md font-semibold text-gray-800 truncate mb-1 cursor-pointer" title="${product.name}" onclick="navigateTo('product', event, ${product.id})">${product.name}</h3>
+                        <p class="text-sm text-gray-500 mb-2">Vendido por: ${product.seller}</p>
+                        ${renderStars(product.rating)}
+                        <div class="mt-3 flex-grow">
+                            ${product.oldPrice ? `<p class="text-sm text-gray-500 line-through">${formatCurrency(product.oldPrice)}</p>` : ''}
+                            <p class="text-xl font-bold text-red-600">${formatCurrency(product.price)}</p>
+                        </div>
+                        <div class="mt-4 space-y-2">
+                            <button onclick="buyNow(event, ${product.id})" class="w-full bg-red-600 text-white font-semibold py-2 rounded-md hover:bg-red-700 transition duration-300">
+                                Comprar Agora
+                            </button>
+                            <button onclick="addToCart(event, ${product.id})" class="w-full bg-red-100 text-red-700 font-semibold py-2 rounded-md hover:bg-red-200 transition duration-300">
+                                Adicionar ao carrinho
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function createCategoryCard(category) {
+            return `
+                 <a href="#" onclick="navigateTo('categories', event, { initialCategory: '${category.name}' })" class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center justify-center text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    ${category.icon}
+                    <span class="mt-2 text-sm font-medium text-gray-700">${category.name}</span>
+                </a>
+            `;
+        }
+        
+        // --- Lógica de Autenticação e Sessão ---
+        let currentUser = null;
+
+        function handleUserRegistration(event) {
+            event.preventDefault();
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+            if (password !== confirmPassword) {
+                showNotification("As senhas não coincidem.");
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('mercadoBR_users')) || [];
+            if (users.find(user => user.email === email)) {
+                showNotification("Este e-mail já está cadastrado.");
+                return;
+            }
+
+            users.push({ name, email, password, role: 'user' });
+            localStorage.setItem('mercadoBR_users', JSON.stringify(users));
+            showNotification("Cadastro realizado com sucesso!");
+            switchAuthTab('login');
+        }
+        
+        function handleSellerRegistration(event) {
+            event.preventDefault();
+            const shopName = document.getElementById('seller-reg-shop-name').value;
+            const doc = document.getElementById('seller-reg-doc').value;
+            const email = document.getElementById('seller-reg-email').value;
+            const password = document.getElementById('seller-reg-password').value;
+            const confirmPassword = document.getElementById('seller-reg-confirm-password').value;
+
+            if (password !== confirmPassword) {
+                showNotification("As senhas não coincidem.");
+                return;
+            }
+
+            const sellers = JSON.parse(localStorage.getItem('mercadoBR_sellers')) || [];
+            if (sellers.find(seller => seller.email === email)) {
+                showNotification("Este e-mail já está cadastrado.");
+                return;
+            }
+
+            sellers.push({ shopName, doc, email, password, role: 'seller' });
+            localStorage.setItem('mercadoBR_sellers', JSON.stringify(sellers));
+            showNotification("Cadastro de loja realizado com sucesso!");
+            switchSellerAuthTab('login');
+        }
+
+        function handleUserLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+
+            // Admin Login
+            if (email === 'Admin' && password === '12345') {
+                currentUser = { name: 'Admin', email: 'admin@mercado.br', role: 'admin' };
+                sessionStorage.setItem('mercadoBR_session', JSON.stringify(currentUser));
+                updateHeader();
+                showNotification("Bem-vindo, Admin!");
+                showHomePage();
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('mercadoBR_users')) || [];
+            const foundUser = users.find(user => user.email === email && user.password === password);
+
+            if (foundUser) {
+                currentUser = foundUser;
+                sessionStorage.setItem('mercadoBR_session', JSON.stringify(currentUser));
+                updateHeader();
+                showNotification(`Bem-vindo(a), ${currentUser.name.split(' ')[0]}!`);
+                showHomePage();
+            } else {
+                showNotification("E-mail ou senha inválidos.");
+            }
+        }
+
+        function handleSellerLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('seller-auth-email').value;
+            const password = document.getElementById('seller-auth-password').value;
+
+            const sellers = JSON.parse(localStorage.getItem('mercadoBR_sellers')) || [];
+            const foundSeller = sellers.find(seller => seller.email === email && seller.password === password);
+
+            if (foundSeller) {
+                currentUser = foundSeller;
+                sessionStorage.setItem('mercadoBR_session', JSON.stringify(currentUser));
+                updateHeader();
+                showNotification(`Bem-vindo(a), ${currentUser.shopName}!`);
+                showHomePage();
+            } else {
+                showNotification("E-mail ou senha de vendedor inválidos.");
+            }
+        }
+        
+        function handleLogout() {
+            currentUser = null;
+            sessionStorage.removeItem('mercadoBR_session');
+            updateHeader();
+            showNotification("Você saiu da sua conta.");
+            showHomePage();
+        }
+        
+        function updateHeader() {
+            const userActions = document.getElementById('user-actions');
+            if (currentUser) {
+                const displayName = currentUser.role === 'seller' ? currentUser.shopName : currentUser.name.split(' ')[0];
+                userActions.innerHTML = `
+                    <div class="text-right">
+                        <span class="text-sm text-gray-700 hidden sm:block">Olá, ${displayName}</span>
+                        <a href="#" onclick="handleLogout()" class="text-sm text-red-600 font-semibold hover:underline">Sair</a>
+                    </div>
+                    <div class="relative">
+                        <a href="#" class="text-gray-600 hover:text-red-600 transition" onclick="navigateTo('cart', event)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                        </a>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </div>
+                `;
+            } else {
+                userActions.innerHTML = `
+                    <a href="#" onclick="navigateTo('auth', event)" class="text-gray-600 hover:text-red-600 transition p-2 rounded-full hover:bg-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </a>
+                    <div class="relative">
+                        <a href="#" class="text-gray-600 hover:text-red-600 transition" onclick="navigateTo('cart', event)">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                        </a>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </div>
+                `;
+            }
+            updateCartCount(); // Ensure cart count is correct after UI update
+        }
+
+        function loadSession() {
+            const session = sessionStorage.getItem('mercadoBR_session');
+            if (session) {
+                currentUser = JSON.parse(session);
+            }
+            updateHeader();
+        }
+
+        // --- Lógica do Carrinho e Navegação ---
+
+        const homeView = document.getElementById('home-view');
+        const pageView = document.getElementById('page-view');
+        const notificationEl = document.getElementById('notification');
+        
+        let cart = [];
+        let couponApplied = null;
+        let shippingCost = 0;
+
+        function showNotification(message) {
+            notificationEl.textContent = message;
+            notificationEl.classList.remove('opacity-0', 'translate-y-10');
+            notificationEl.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                notificationEl.classList.remove('opacity-100', 'translate-y-0');
+                notificationEl.classList.add('opacity-0', 'translate-y-10');
+            }, 3000);
+        }
+
+        function updateCartCount() {
+            const cartCountEl = document.getElementById('cart-count');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if(cartCountEl) cartCountEl.textContent = totalItems;
+        }
+        
+        function addToCart(event, productId, quantity = 1) {
+            if(event) event.stopPropagation();
+            const existingItem = cart.find(item => item.productId === productId);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({ productId: productId, quantity: quantity });
+            }
+            updateCartCount();
+            showNotification('Produto adicionado ao carrinho!');
+        }
+
+        function buyNow(event, productId) {
+             if(event) event.stopPropagation();
+             addToCart(null, productId, 1);
+             navigateTo('cart');
+        }
+
+        function updateQuantity(productId, change) {
+            const cartItem = cart.find(item => item.productId === productId);
+            if (cartItem) {
+                cartItem.quantity += change;
+                if (cartItem.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartCount();
+                    renderCartPage();
+                }
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.productId !== productId);
+            updateCartCount();
+            renderCartPage();
+        }
+
+        function showHomePage(event) {
+            if(event) event.preventDefault();
+            homeView.classList.remove('hidden');
+            pageView.classList.add('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function navigateTo(page, event, data) {
+            if(event) event.preventDefault();
+            homeView.classList.add('hidden');
+            pageView.classList.remove('hidden');
+            pageView.innerHTML = ''; // Limpa o conteúdo anterior
+            window.scrollTo(0, 0);
+
+            switch(page) {
+                case 'categories': renderCategoryPage(data ? data.initialCategory : null); break;
+                case 'product': renderProductPage(data); break;
+                case 'auth': renderAuthPage(); break;
+                case 'sellerAuth': renderSellerAuthPage(); break;
+                case 'cart': renderCartPage(); break;
+                case 'checkout': renderCheckoutPage(); break;
+                case 'orderConfirmation': renderOrderConfirmationPage(data); break;
+                case 'deals': renderFilteredProductsPage('Ofertas do Dia', products.filter(p => p.isDeal)); break;
+                case 'popular': renderFilteredProductsPage('Produtos Populares', products.sort((a, b) => b.rating - a.rating).slice(0, 10)); break;
+                case 'search': renderFilteredProductsPage(`Resultados para "${data.query}"`, data.results); break;
+            }
+        }
+        
+        function renderCategoryPage(initialCategory = null) {
+            const filterHtml = allCategories.map(cat => `<div class="flex items-center"><input id="cat-${cat.toLowerCase()}" name="category" type="checkbox" value="${cat}" onchange="applyFiltersAndRender()" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500" ${initialCategory === cat ? 'checked' : ''}><label for="cat-${cat.toLowerCase()}" class="ml-3 text-sm text-gray-600">${cat}</label></div>`).join('');
+            pageView.innerHTML = `<div class="flex flex-col md:flex-row gap-8"><aside class="w-full md:w-1/4 lg:w-1/5"><h2 class="text-xl font-bold mb-4">Filtros</h2><div class="bg-white p-4 rounded-lg shadow-sm"><h3 class="font-semibold text-gray-800 mb-3">Categorias</h3><div id="category-filter-list" class="space-y-2 max-h-60 overflow-y-auto pr-2">${filterHtml}</div></div></aside><section class="w-full md:w-3/4 lg:w-4/5"><h1 class="text-3xl font-bold text-gray-800 mb-6">Nossos Produtos</h1><div id="filtered-products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div></section></div>`;
+            applyFiltersAndRender();
+        }
+
+        function applyFiltersAndRender() {
+            const grid = document.getElementById('filtered-products-grid');
+            const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value);
+            let filteredProducts = selectedCategories.length > 0 ? products.filter(p => selectedCategories.includes(p.category)) : products;
+            grid.innerHTML = filteredProducts.length > 0 ? filteredProducts.map(createProductCard).join('') : '<p class="col-span-full text-center text-gray-500">Nenhum produto encontrado.</p>';
+        }
+
+        function renderProductPage(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) { pageView.innerHTML = '<p>Produto não encontrado.</p>'; return; }
+            pageView.innerHTML = `<div><button onclick="history.back()" class="text-red-600 hover:text-red-800 mb-6">&larr; Voltar</button><div class="bg-white rounded-lg shadow-lg p-8 flex flex-col md:flex-row gap-8"><div class="w-full md:w-1/2"><img src="${product.image}" alt="${product.name}" class="w-full rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/600x600?text=Imagem+Indispon%C3%ADvel';"></div><div class="w-full md:w-1/2"><h1 class="text-4xl font-bold text-gray-900 mb-2">${product.name}</h1><p class="text-md text-gray-500 mb-4">Vendido por <a href="#" class="text-red-600 font-semibold">${product.seller}</a></p><div class="mb-4">${renderStars(product.rating)}</div><div class="mb-6">${product.oldPrice ? `<p class="text-lg text-gray-500 line-through">${formatCurrency(product.oldPrice)}</p>` : ''}<p class="text-4xl font-extrabold text-red-600">${formatCurrency(product.price)}</p><p class="text-sm text-gray-600">em até 10x sem juros</p></div><p class="text-gray-700 mb-6">${product.description}</p><div class="flex flex-col space-y-3"><button onclick="addToCart(event, ${product.id})" class="w-full bg-red-100 text-red-700 font-bold py-4 px-6 rounded-lg hover:bg-red-200 transition">Adicionar ao Carrinho</button><button onclick="buyNow(event, ${product.id})" class="w-full bg-red-600 text-white font-bold py-4 px-6 rounded-lg hover:bg-red-700 transition">Comprar Agora</button></div></div></div></div>`;
+        }
+
+        function renderCartPage() {
+            if (cart.length === 0) {
+                pageView.innerHTML = `<div class="text-center bg-white p-12 rounded-lg shadow-lg"><h1 class="text-3xl font-bold text-gray-800 mb-4">Seu carrinho está vazio</h1><p class="text-gray-600 mb-8">Que tal explorar nossas ofertas?</p><a href="#" onclick="showHomePage(event)" class="bg-red-600 text-white font-semibold px-8 py-3 rounded-md hover:bg-red-700 transition">Voltar para a Loja</a></div>`;
+                return;
+            }
+            let subtotal = 0;
+            const cartItemsHtml = cart.map(item => {
+                const product = products.find(p => p.id === item.productId);
+                const itemTotal = product.price * item.quantity;
+                subtotal += itemTotal;
+                return `<div class="flex items-center justify-between py-4 border-b"><div class="flex items-center space-x-4"><img src="${product.image}" alt="${product.name}" class="w-20 h-20 object-cover rounded-lg"><div><h3 class="font-semibold text-gray-800">${product.name}</h3><p class="text-sm text-gray-500">${formatCurrency(product.price)}</p><button onclick="removeFromCart(${product.id})" class="text-xs text-red-500 hover:underline mt-1">Remover</button></div></div><div class="flex items-center space-x-4"><div class="flex items-center border rounded-md"><button onclick="updateQuantity(${product.id}, -1)" class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-md">-</button><span class="w-12 text-center text-sm">${item.quantity}</span><button onclick="updateQuantity(${product.id}, 1)" class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-md">+</button></div><p class="font-semibold w-28 text-right text-gray-800">${formatCurrency(itemTotal)}</p></div></div>`;
+            }).join('');
+            const discountAmount = couponApplied ? subtotal * couponApplied.value : 0;
+            const total = subtotal - discountAmount + shippingCost;
+            pageView.innerHTML = `<h1 class="text-3xl font-bold text-gray-800 mb-6">Meu Carrinho</h1><div class="flex flex-col lg:flex-row gap-8"><div class="w-full lg:w-2/3 bg-white p-6 rounded-lg shadow-lg"><div class="flex justify-between font-bold text-sm text-gray-500 border-b pb-3 mb-2"><span>PRODUTO</span><span class="text-right">TOTAL</span></div>${cartItemsHtml}</div><div class="w-full lg:w-1/3"><div class="bg-white p-6 rounded-lg shadow-lg sticky top-28"><h2 class="text-xl font-bold text-gray-800 border-b pb-3 mb-4">Resumo do Pedido</h2><div class="space-y-3 text-gray-600"><div class="flex justify-between"><span>Subtotal</span><span>${formatCurrency(subtotal)}</span></div>${couponApplied ? `<div class="flex justify-between text-green-600"><span>Desconto (${couponApplied.code})</span><span>-${formatCurrency(discountAmount)}</span></div>` : ''}<div class="flex justify-between"><span>Frete</span><span id="shipping-cost-display">${shippingCost > 0 ? formatCurrency(shippingCost) : 'A calcular'}</span></div><div class="border-t pt-3 mt-3 flex justify-between font-bold text-gray-900 text-lg"><span>Total</span><span>${formatCurrency(total)}</span></div></div><div class="mt-6"><label class="text-sm font-medium">Calcular Frete</label><div class="flex mt-1"><input type="text" id="cep-input" placeholder="Digite seu CEP" class="w-full px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-1 focus:ring-red-500"><button onclick="calculateShipping()" class="bg-gray-200 text-gray-700 px-4 rounded-r-md hover:bg-gray-300 font-semibold text-sm">OK</button></div></div><div class="mt-4"><label class="text-sm font-medium">Cupom de Desconto</label><div class="flex mt-1"><input type="text" id="coupon-input" placeholder="Digite seu cupom" class="w-full px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-1 focus:ring-red-500"><button onclick="applyCoupon()" class="bg-gray-200 text-gray-700 px-4 rounded-r-md hover:bg-gray-300 font-semibold text-sm">Aplicar</button></div></div><button onclick="handleCheckout()" class="mt-6 w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition">Finalizar Compra</button></div></div></div>`;
+        }
+
+        function handleCheckout() {
+            if (shippingCost === 0) {
+                showNotification("Por favor, calcule o frete antes de continuar.");
+                return;
+            }
+            navigateTo('checkout');
+        }
+        
+        function renderCheckoutPage() {
+            if (!currentUser) {
+                showNotification("Você precisa fazer login para finalizar a compra.");
+                navigateTo('auth');
+                return;
+            }
+             if (cart.length === 0) {
+                showHomePage();
+                return;
+            }
+
+            let subtotal = cart.reduce((sum, item) => sum + (products.find(p=>p.id===item.productId).price * item.quantity), 0);
+            const discountAmount = couponApplied ? subtotal * couponApplied.value : 0;
+            const total = subtotal - discountAmount + shippingCost;
+            
+            const savedCards = [ { last4: '1234', brand: 'Visa' }, { last4: '5678', brand: 'Mastercard' } ];
+            const savedCardsHtml = savedCards.map((card, index) => `
+                <label for="card-${index}" class="flex items-center p-3 border rounded-md cursor-pointer hover:bg-gray-50">
+                    <input type="radio" id="card-${index}" name="payment-card" value="${card.last4}" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500" checked>
+                    <span class="ml-3 text-sm font-medium text-gray-700">Cartão final ${card.last4} (${card.brand})</span>
+                </label>
+            `).join('');
+
+            pageView.innerHTML = `
+                <h1 class="text-3xl font-bold text-gray-800 mb-6">Finalizar Compra</h1>
+                <div class="flex flex-col lg:flex-row-reverse gap-8">
+                    <!-- Resumo do Pedido -->
+                    <div class="w-full lg:w-1/3">
+                        <div class="bg-white p-6 rounded-lg shadow-lg sticky top-28">
+                            <h2 class="text-xl font-bold text-gray-800 border-b pb-3 mb-4">Resumo do Pedido</h2>
+                            <div class="space-y-3 text-gray-600">
+                                <div class="flex justify-between"><span>Subtotal</span><span>${formatCurrency(subtotal)}</span></div>
+                                ${couponApplied ? `<div class="flex justify-between text-green-600"><span>Desconto (${couponApplied.code})</span><span>-${formatCurrency(discountAmount)}</span></div>` : ''}
+                                <div class="flex justify-between"><span>Frete</span><span>${formatCurrency(shippingCost)}</span></div>
+                                <div class="border-t pt-3 mt-3 flex justify-between font-bold text-gray-900 text-lg"><span>Total</span><span>${formatCurrency(total)}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Forma de Pagamento -->
+                    <div class="w-full lg:w-2/3 bg-white p-6 rounded-lg shadow-lg">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4">Forma de Pagamento</h2>
+                        <div class="flex border-b mb-4">
+                            <button id="card-payment-tab" onclick="switchPaymentMethod('card')" class="flex-1 py-2 text-center font-semibold text-red-600 border-b-2 border-red-600">Cartão de Crédito</button>
+                            <button id="pix-payment-tab" onclick="switchPaymentMethod('pix')" class="flex-1 py-2 text-center font-semibold text-gray-500">Pix</button>
+                        </div>
+
+                        <!-- Opção Cartão de Crédito -->
+                        <div id="card-payment-view">
+                            <div class="space-y-3 mb-4">
+                                ${savedCardsHtml}
+                                <label for="card-new" class="flex items-center p-3 border rounded-md cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" id="card-new" name="payment-card" value="new" class="h-4 w-4 text-red-600 border-gray-300 focus:ring-red-500">
+                                    <span class="ml-3 text-sm font-medium text-gray-700">Adicionar novo cartão</span>
+                                </label>
+                            </div>
+                            <form id="new-card-form" class="hidden space-y-4 p-4 border rounded-md bg-gray-50">
+                                <input type="text" placeholder="Número do Cartão" class="w-full p-2 border rounded-md">
+                                <input type="text" placeholder="Nome no Cartão" class="w-full p-2 border rounded-md">
+                                <div class="flex gap-4">
+                                    <input type="text" placeholder="Validade (MM/AA)" class="w-1/2 p-2 border rounded-md">
+                                    <input type="text" placeholder="CVV" class="w-1/2 p-2 border rounded-md">
+                                </div>
+                            </form>
+                             <button onclick="navigateTo('orderConfirmation', event, {method: 'card'})" class="mt-6 w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition">Confirmar Compra com Cartão</button>
+                        </div>
+
+                        <!-- Opção PIX -->
+                        <div id="pix-payment-view" class="hidden text-center">
+                            <p class="text-gray-600 mb-4">Ao confirmar, um QR Code e um código Copia e Cola serão gerados para pagamento.</p>
+                            <button onclick="navigateTo('orderConfirmation', event, {method: 'pix'})" class="mt-6 w-full bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition">Confirmar Compra com Pix</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            // Lógica para mostrar/esconder formulário de novo cartão
+            document.querySelectorAll('input[name="payment-card"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    document.getElementById('new-card-form').classList.toggle('hidden', radio.value !== 'new');
+                });
+            });
+        }
+        
+        function switchPaymentMethod(method) {
+            const cardTab = document.getElementById('card-payment-tab'), pixTab = document.getElementById('pix-payment-tab');
+            const cardView = document.getElementById('card-payment-view'), pixView = document.getElementById('pix-payment-view');
+            if(method === 'card') {
+                cardTab.classList.add('text-red-600', 'border-red-600'); cardTab.classList.remove('text-gray-500');
+                pixTab.classList.add('text-gray-500'); pixTab.classList.remove('text-red-600', 'border-red-600');
+                cardView.classList.remove('hidden'); pixView.classList.add('hidden');
+            } else {
+                pixTab.classList.add('text-red-600', 'border-red-600'); pixTab.classList.remove('text-gray-500');
+                cardTab.classList.add('text-gray-500'); cardTab.classList.remove('text-red-600', 'border-red-600');
+                pixView.classList.remove('hidden'); cardView.classList.add('hidden');
+            }
+        }
+        
+        function renderOrderConfirmationPage(data) {
+            const { method } = data;
+            
+            let confirmationContent = '';
+            if (method === 'pix') {
+                const pixCode = '00020126360014br.gov.bcb.pix0114+5511999999999520400005303986540510.005802BR5913NOME_DO_VENDEDOR6008BRASILIA62070503***6304E2D5';
+                confirmationContent = `
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixCode)}" alt="QR Code Pix" class="mx-auto mb-4">
+                    <h3 class="text-lg font-semibold mb-2">Pague com Pix Copia e Cola</h3>
+                    <div class="bg-gray-200 p-3 rounded-md mb-4 relative">
+                        <p class="text-sm text-gray-700 break-words pr-12">${pixCode}</p>
+                        <button onclick="navigator.clipboard.writeText('${pixCode}'); showNotification('Código Pix copiado!')" class="absolute top-1/2 right-2 -translate-y-1/2 p-2 rounded-md hover:bg-gray-300">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        </button>
+                    </div>
+                    <p class="text-gray-600">Aguardando pagamento para liberar o seu pedido.</p>
+                `;
+            } else { // card
+                confirmationContent = `
+                    <p class="text-gray-600 text-lg">O pagamento foi aprovado!</p>
+                    <p class="text-gray-600">Seu pedido foi confirmado e em breve será preparado para envio.</p>
+                `;
+            }
+            
+            pageView.innerHTML = `
+                 <div class="text-center bg-white p-12 rounded-lg shadow-lg max-w-2xl mx-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <h1 class="text-3xl font-bold text-gray-800 mb-4">Pedido Realizado com Sucesso!</h1>
+                    <div class="my-6">
+                        ${confirmationContent}
+                    </div>
+                    <a href="#" onclick="showHomePage(event)" class="bg-red-600 text-white font-semibold px-8 py-3 rounded-md hover:bg-red-700 transition">Voltar para a Loja</a>
+                </div>
+            `;
+            
+            // Limpa o carrinho após a compra
+            cart = [];
+            shippingCost = 0;
+            couponApplied = null;
+            updateCartCount();
+        }
+
+
+        function calculateShipping() {
+            const cep = document.getElementById('cep-input').value;
+            if(cep.replace(/\D/g, '').length === 8) { shippingCost = 15.50; showNotification('Frete calculado!'); } else { shippingCost = 0; showNotification('CEP inválido.'); }
+            renderCartPage();
+        }
+
+        function applyCoupon() {
+            const couponCode = document.getElementById('coupon-input').value.toUpperCase();
+            if (couponCode === 'DESCONTO10') { couponApplied = { code: 'DESCONTO10', value: 0.1 }; showNotification('Cupom aplicado!'); } else { couponApplied = null; showNotification('Cupom inválido.'); }
+            renderCartPage();
+        }
+        
+        function renderAuthPage() {
+            pageView.innerHTML = `<div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8 mt-4"><div class="mb-6"><div class="flex border-b"><button id="login-tab" onclick="switchAuthTab('login')" class="flex-1 py-2 text-center font-semibold text-red-600 border-b-2 border-red-600">Entrar</button><button id="register-tab" onclick="switchAuthTab('register')" class="flex-1 py-2 text-center font-semibold text-gray-500">Cadastrar</button></div></div><div id="login-form"><h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Acesse sua conta</h2><form onsubmit="handleUserLogin(event)"><div class="mb-4"><label for="auth-email" class="block text-sm font-medium text-gray-700">Email</label><input type="text" id="auth-email" placeholder="seuemail@exemplo.com" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required></div><div class="mb-6"><label for="auth-password" class="block text-sm font-medium text-gray-700">Senha</label><input type="password" id="auth-password" placeholder="Sua senha" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required></div><button type="submit" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 font-semibold transition">Entrar</button></form></div><div id="register-form" class="hidden"><h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Crie sua conta</h2><form onsubmit="handleUserRegistration(event)"><div class="mb-4"><label for="reg-name" class="block text-sm font-medium text-gray-700">Nome Completo</label><input type="text" id="reg-name" placeholder="Seu nome completo" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required></div><div class="mb-4"><label for="reg-email" class="block text-sm font-medium text-gray-700">Email</label><input type="email" id="reg-email" placeholder="seuemail@exemplo.com" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required></div><div class="mb-4"><label for="reg-password" class="block text-sm font-medium text-gray-700">Senha</label><input type="password" id="reg-password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required></div><div class="mb-6"><label for="reg-confirm-password" class="block text-sm font-medium text-gray-700">Confirme a Senha</label><input type="password" id="reg-confirm-password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required></div><button type="submit" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 font-semibold transition">Criar Conta</button></form></div></div>`;
+        }
+
+        function switchAuthTab(tabName) {
+            const loginTab = document.getElementById('login-tab'), registerTab = document.getElementById('register-tab');
+            const loginForm = document.getElementById('login-form'), registerForm = document.getElementById('register-form');
+            if (tabName === 'login') {
+                loginTab.classList.add('text-red-600', 'border-red-600'); loginTab.classList.remove('text-gray-500');
+                registerTab.classList.add('text-gray-500'); registerTab.classList.remove('text-red-600', 'border-red-600');
+                loginForm.classList.remove('hidden'); registerForm.classList.add('hidden');
+            } else {
+                registerTab.classList.add('text-red-600', 'border-red-600'); registerTab.classList.remove('text-gray-500');
+                loginTab.classList.add('text-gray-500'); loginTab.classList.remove('text-red-600', 'border-red-600');
+                registerForm.classList.remove('hidden'); loginForm.classList.add('hidden');
+            }
+        }
+
+        function renderSellerAuthPage() {
+            pageView.innerHTML = `<div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-8 mt-4"><div class="mb-6"><div class="flex border-b"><button id="seller-login-tab" onclick="switchSellerAuthTab('login')" class="flex-1 py-2 text-center font-semibold text-red-600 border-b-2 border-red-600">Entrar como Vendedor</button><button id="seller-register-tab" onclick="switchSellerAuthTab('register')" class="flex-1 py-2 text-center font-semibold text-gray-500">Cadastre sua Loja</button></div></div><div id="seller-login-form"><h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Acesse seu Painel</h2><form onsubmit="handleSellerLogin(event)"><div class="mb-4"><label for="seller-auth-email" class="block text-sm font-medium text-gray-700">Email</label><input type="email" id="seller-auth-email" placeholder="email@sua-loja.com" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required></div><div class="mb-6"><label for="seller-auth-password" class="block text-sm font-medium text-gray-700">Senha</label><input type="password" id="seller-auth-password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required></div><button type="submit" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 font-semibold transition">Entrar</button></form></div><div id="seller-register-form" class="hidden"><h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Abra sua Loja Agora</h2><form onsubmit="handleSellerRegistration(event)"><div class="mb-4"><label for="seller-reg-shop-name" class="block text-sm font-medium text-gray-700">Nome da Loja</label><input type="text" id="seller-reg-shop-name" placeholder="O nome da sua loja" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required></div><div class="mb-4"><label for="seller-reg-doc" class="block text-sm font-medium text-gray-700">CNPJ ou CPF</label><input type="text" id="seller-reg-doc" placeholder="Seu documento" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required></div><div class="mb-4"><label for="seller-reg-email" class="block text-sm font-medium text-gray-700">Email</label><input type="email" id="seller-reg-email" placeholder="seuemail@exemplo.com" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required></div><div class="mb-4"><label for="seller-reg-password" class="block text-sm font-medium text-gray-700">Senha</label><input type="password" id="seller-reg-password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required></div><div class="mb-6"><label for="seller-reg-confirm-password" class="block text-sm font-medium text-gray-700">Confirme a Senha</label><input type="password" id="seller-reg-confirm-password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required></div><button type="submit" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 font-semibold transition">Criar Loja</button></form></div></div>`;
+        }
+
+        function switchSellerAuthTab(tabName) {
+            const loginTab = document.getElementById('seller-login-tab'), registerTab = document.getElementById('seller-register-tab');
+            const loginForm = document.getElementById('seller-login-form'), registerForm = document.getElementById('seller-register-form');
+            if (tabName === 'login') {
+                loginTab.classList.add('text-red-600', 'border-red-600'); loginTab.classList.remove('text-gray-500');
+                registerTab.classList.add('text-gray-500'); registerTab.classList.remove('text-red-600', 'border-red-600');
+                loginForm.classList.remove('hidden'); registerForm.classList.add('hidden');
+            } else {
+                registerTab.classList.add('text-red-600', 'border-red-600'); registerTab.classList.remove('text-gray-500');
+                loginTab.classList.add('text-gray-500'); loginTab.classList.remove('text-red-600', 'border-red-600');
+                registerForm.classList.remove('hidden'); loginForm.classList.add('hidden');
+            }
+        }
+
+        function renderFilteredProductsPage(title, productList) {
+             pageView.innerHTML = `<section><h1 class="text-3xl font-bold text-gray-800 mb-6">${title}</h1><div id="filtered-products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">${productList.length > 0 ? productList.map(createProductCard).join('') : '<p class="col-span-full text-center text-gray-500">Nenhum produto encontrado.</p>'}</div></section>`;
+        }
+        
+        function performSearch() {
+            const query = (document.getElementById('search-input-desktop').value || document.getElementById('search-input-mobile').value).toLowerCase();
+            if (!query) return;
+            const results = products.filter(p => p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query) || p.description.toLowerCase().includes(query));
+            navigateTo('search', null, { query, results });
+        }
+        
+        
+        // --- Carregamento Inicial ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const categoryGrid = document.getElementById('category-grid');
+            const dealsGrid = document.getElementById('deals-grid');
+            const popularGrid = document.getElementById('popular-grid');
+
+            if (categoryGrid) categoryGrid.innerHTML = categories.map(createCategoryCard).join('');
+            if (dealsGrid) dealsGrid.innerHTML = products.filter(p => p.isDeal).map(createProductCard).join('');
+            if (popularGrid) popularGrid.innerHTML = products.filter(p => !p.isDeal).sort((a,b) => b.rating - a.rating).slice(0,5).map(createProductCard).join('');
+        
+            document.getElementById('search-input-desktop').addEventListener('keyup', (event) => { if (event.key === 'Enter') performSearch(); });
+            document.getElementById('search-input-mobile').addEventListener('keyup', (event) => { if (event.key === 'Enter') performSearch(); });
+
+            loadSession();
+        });
+    </script>
+</body>
+</html>
+
